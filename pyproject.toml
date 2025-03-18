@@ -29,6 +29,7 @@ Homepage = "https://github.com/rifqanzalbina/textstat_id"
 "Bug Tracker" = "https://github.com/rifqanzalbina/textstat_id/issues"
 
 [tool.setuptools]
+license-files = []
 packages = ["textstat_id"]
 include-package-data = true
 
