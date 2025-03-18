@@ -1,6 +1,6 @@
 # textstat id
 
-Library untuk analisis statistik teks Bahasa Indonesia.
+Analisis statistik teks Bahasa Indonesia.
 
 ## Instalasi
 
