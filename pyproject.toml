@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "textstat_id"
+version = "0.0.1"
+description = "Library untuk analisis statistik teks Bahasa Indonesia"
+readme = "README.md"
+authors = [
+    {name = "rifqanzalbina", email = "zalbinarifqan19@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Natural Language :: Indonesian",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.6"
+dependencies = [
+    "nltk>=3.6.0",
+    "pandas>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rifqanzalbina/textstat_id"
+"Bug Tracker" = "https://github.com/rifqanzalbina/textstat_id/issues"
+
+[tool.setuptools]
+packages = ["textstat_id"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"textstat_id" = ["data/*.json"]
