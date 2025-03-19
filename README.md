@@ -34,3 +34,4 @@ print(f"Skor keterbacaan: {score}")
 - Mendeteksi kata tidak baku dalam bahasa Indonesia
 - Mengekstrak kata kunci dari teks
 - Menghitung readability score untuk teks Bahasa Indonesia
+- Menganalisis sentimen teks Bahasa Indonesia
