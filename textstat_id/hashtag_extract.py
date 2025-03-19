@@ -10,3 +10,7 @@ def ekstrak_hashtag(teks : str) -> list:
         Returns : 
             list : Daftar hashtag yang ditemukan dalam teks.
     """
+    pattern = r'#\w+'
+    hashtags = re.findall(pattern, teks)
+    return hashtags
+

@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: textstat_id
-Version: 0.0.5
+Version: 0.0.6
 Summary: Library untuk analisis statistik teks Bahasa Indonesia
 Author-email: rifqanzalbina <zalbinarifqan19@gmail.com>
 License: MIT

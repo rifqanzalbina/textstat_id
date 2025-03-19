@@ -37,4 +37,5 @@ print(f"Skor keterbacaan: {score}")
 - Menganalisis sentimen teks Bahasa Indonesia
 - Mengekstrak link url
 - Menganalisis link url
+- Mengekstrak Hashtag
 

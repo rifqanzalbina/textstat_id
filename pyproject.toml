@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "textstat_id"
-version = "0.0.5"
+version = "0.0.6"
 description = "Library untuk analisis statistik teks Bahasa Indonesia"
 readme = "README.md"
 authors = [

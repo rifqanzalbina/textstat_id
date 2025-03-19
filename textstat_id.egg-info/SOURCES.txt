@@ -6,9 +6,11 @@ tests/test_analyzer.py
 tests/test_counter.py
 tests/test_readability.py
 tests/test_sentiment.py
+tests/test_url_extract.py
 textstat_id/__init__.py
 textstat_id/analyzer.py
 textstat_id/counter.py
+textstat_id/hashtag_extract.py
 textstat_id/readability.py
 textstat_id/sentiment.py
 textstat_id/url_exctract.py
@@ -19,3 +21,7 @@ textstat_id.egg-info/dependency_links.txt
 textstat_id.egg-info/requires.txt
 textstat_id.egg-info/top_level.txt
 textstat_id/data/kata_baku.json
+textstat_id/data/kata_negatif.json
+textstat_id/data/kata_penguat_negatif.json
+textstat_id/data/kata_penguat_positif.json
+textstat_id/data/kata_positif.json
