@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: textstat_id
-Version: 0.0.4
+Version: 0.0.5
 Summary: Library untuk analisis statistik teks Bahasa Indonesia
 Author-email: rifqanzalbina <zalbinarifqan19@gmail.com>
 License: MIT
@@ -18,7 +18,7 @@ Requires-Dist: pandas>=1.0.0
 
 # textstat id
 
-Library untuk analisis statistik teks Bahasa Indonesia.
+Analisis statistik teks Bahasa Indonesia.
 
 ## Instalasi
 
@@ -53,3 +53,6 @@ print(f"Skor keterbacaan: {score}")
 - Mengekstrak kata kunci dari teks
 - Menghitung readability score untuk teks Bahasa Indonesia
 - Menganalisis sentimen teks Bahasa Indonesia
+- Mengekstrak link url
+- Menganalisis link url
+
