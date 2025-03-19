@@ -1,9 +1,65 @@
-"""
-Modul untuk analisis sentimen teks Bahasa Indonesia
-"""
-
+import os
 import re
+import json
 from collections import defaultdict
+
+# ! load data kata positif
+def _load_kata_positif():
+    """
+    Memuat daftar kata positif dari file JSON 
+    """
+    data_path = os.path.join(os.path.dirname(__file__), 'data', 'kata_positif.json')
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return set(data.get("kata_positif", []))
+    except FileNotFoundError:
+        return set()
+
+# ! load data kata negatif
+def _load_kata_negatif():
+    """
+    Memuat daftar kata negatif dari file JSON 
+    """
+    data_path = os.path.join(os.path.dirname(__file__), 'data', 'kata_negatif.json')
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return set(data.get("kata_negatif", []))
+    except FileNotFoundError:
+        return set()
+    
+# ! load data kata penguat positiff
+def _load_kata_penguat_positif():
+    """
+        Memuat daftar kata negatif dari file JSON
+    """
+    data_path = os.path.join(os.path.dirname(__file__), 'data', 'kata_penguat_positif.json')
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return set(data.get("kata_penguat_positiff", []))
+    except FileNotFoundError:
+        return set()
+
+# ! load data kata penguat negatif
+def _load_kata_penguat_negatif():
+    """
+        Memuat daftar kata negatif dari file JSON
+    """
+    data_path = os.path.join(os.path.dirname(__file__), 'data', 'kata_penguat_negatif.json')
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return set(data.get("kata_penguat_negatif", []))
+    except FileNotFoundError:
+        return set()
+
+# Global sets (berasal dari file JSON)
+KATA_POSITIF = _load_kata_positif()
+KATA_NEGATIF = _load_kata_negatif()
+KATA_PENGUAT_POSITIF = _load_kata_penguat_positif()
+KATA_PENGUAT_NEGATIF = _load_kata_penguat_negatif()
 
 def analisis_sentimen(teks):
     """
@@ -15,30 +71,16 @@ def analisis_sentimen(teks):
     Returns:
         dict: Hasil analisis sentimen
     """
-    # Kata-kata positif dalam Bahasa Indonesia
-    kata_positif = {
-        'baik', 'bagus', 'hebat', 'luar biasa', 'senang', 'gembira', 'suka',
-        'cinta', 'indah', 'cantik', 'tampan', 'pintar', 'cerdas', 'berhasil',
-        'sukses', 'menang', 'beruntung', 'sempurna', 'menyenangkan', 'ramah',
-        'bersahabat', 'membantu', 'membanggakan', 'memuaskan', 'menarik'
-    }
-    
-    # Kata-kata negatif dalam Bahasa Indonesia
-    kata_negatif = {
-        'buruk', 'jelek', 'gagal', 'sedih', 'kecewa', 'marah', 'benci',
-        'kesal', 'jengkel', 'takut', 'khawatir', 'cemas', 'menyesal',
-        'menyedihkan', 'mengerikan', 'menakutkan', 'menjijikkan', 'membosankan',
-        'melelahkan', 'menyebalkan', 'mengecewakan', 'menyakitkan'
-    }
+    # Kata positif
+    kata_positif = KATA_POSITIF
+
+    # Kata negatif
+    kata_negatif = KATA_NEGATIF
     
     # Kata-kata penguat
-    penguat_positif = {
-        'sangat', 'amat', 'sekali', 'sungguh', 'benar-benar', 'luar biasa'
-    }
-    
-    penguat_negatif = {
-        'sangat', 'amat', 'sekali', 'sungguh', 'benar-benar', 'sama sekali'
-    }
+    penguat_positif = KATA_PENGUAT_POSITIF
+
+    penguat_negatif = KATA_PENGUAT_NEGATIF
     
     # Kata-kata pembalik
     pembalik = {
@@ -48,7 +90,7 @@ def analisis_sentimen(teks):
     # Bersihkan teks
     teks = teks.lower()
     
-    # Tokenisasi kalimat
+    # Tokenisasi kalimat (pisah berdasarkan titik, tanda seru, atau tanya)
     kalimat_list = re.split(r'[.!?]+', teks)
     kalimat_list = [k.strip() for k in kalimat_list if k.strip()]
     
@@ -64,7 +106,8 @@ def analisis_sentimen(teks):
     total_skor = 0
     
     for kalimat in kalimat_list:
-        skor_kalimat = _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, penguat_negatif, pembalik)
+        skor_kalimat = _analisis_kalimat(kalimat, kata_positif, kata_negatif,
+                                         penguat_positif, penguat_negatif, pembalik)
         total_skor += skor_kalimat['skor']
         
         hasil['detail_kalimat'].append({
@@ -97,41 +140,24 @@ def analisis_sentimen(teks):
 def _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, penguat_negatif, pembalik):
     """
     Menganalisis sentimen satu kalimat
-    
-    Args:
-        kalimat (str): Kalimat yang akan dianalisis
-        kata_positif (set): Set kata-kata positif
-        kata_negatif (set): Set kata-kata negatif
-        penguat_positif (set): Set kata-kata penguat positif
-        penguat_negatif (set): Set kata-kata penguat negatif
-        pembalik (set): Set kata-kata pembalik
-        
-    Returns:
-        dict: Hasil analisis sentimen kalimat
     """
     kata_kata = kalimat.split()
     skor = 0
     kata_positif_terdeteksi = []
     kata_negatif_terdeteksi = []
     
-    # Deteksi pembalik, penguat, dan kata sentimen
     i = 0
     while i < len(kata_kata):
         kata = kata_kata[i]
         
-        # Cek apakah ada frasa (2-3 kata) yang cocok dengan daftar
+        # Cek frasa 2-3 kata (opsional)
         frasa_2 = ' '.join(kata_kata[i:i+2]) if i+1 < len(kata_kata) else ''
         frasa_3 = ' '.join(kata_kata[i:i+3]) if i+2 < len(kata_kata) else ''
         
-        # Cek frasa dalam daftar kata positif/negatif
+        # Cek frasa positif
         if frasa_3 in kata_positif:
             skor += 1
             kata_positif_terdeteksi.append(frasa_3)
-            i += 3
-            continue
-        elif frasa_3 in kata_negatif:
-            skor -= 1
-            kata_negatif_terdeteksi.append(frasa_3)
             i += 3
             continue
         elif frasa_2 in kata_positif:
@@ -139,20 +165,27 @@ def _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, peng
             kata_positif_terdeteksi.append(frasa_2)
             i += 2
             continue
+        
+        # Cek frasa negatif
+        if frasa_3 in kata_negatif:
+            skor -= 1
+            kata_negatif_terdeteksi.append(frasa_3)
+            i += 3
+            continue
         elif frasa_2 in kata_negatif:
             skor -= 1
             kata_negatif_terdeteksi.append(frasa_2)
             i += 2
             continue
         
-        # Cek kata tunggal
+        # Cek kata positif
         if kata in kata_positif:
-            # Cek apakah ada pembalik sebelumnya
+            # Jika ada pembalik sebelumnya
             if i > 0 and kata_kata[i-1] in pembalik:
                 skor -= 1
                 kata_negatif_terdeteksi.append(f"{kata_kata[i-1]} {kata}")
             else:
-                # Cek apakah ada penguat sebelumnya
+                # Jika ada penguat sebelumnya
                 if i > 0 and kata_kata[i-1] in penguat_positif:
                     skor += 2
                     kata_positif_terdeteksi.append(f"{kata_kata[i-1]} {kata}")
@@ -160,13 +193,14 @@ def _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, peng
                     skor += 1
                     kata_positif_terdeteksi.append(kata)
         
+        # Cek kata negatif
         elif kata in kata_negatif:
-            # Cek apakah ada pembalik sebelumnya
+            # Jika ada pembalik sebelumnya
             if i > 0 and kata_kata[i-1] in pembalik:
                 skor += 1
                 kata_positif_terdeteksi.append(f"{kata_kata[i-1]} {kata}")
             else:
-                # Cek apakah ada penguat sebelumnya
+                # Jika ada penguat negatif sebelumnya
                 if i > 0 and kata_kata[i-1] in penguat_negatif:
                     skor -= 2
                     kata_negatif_terdeteksi.append(f"{kata_kata[i-1]} {kata}")
@@ -178,14 +212,18 @@ def _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, peng
     
     # Normalisasi skor antara -1 dan 1
     if kata_kata:
-        skor = max(-1, min(1, skor / (len(kata_kata) / 2)))
+        # Bagi dengan (len(kata_kata) / 2) agar kalimat panjang tidak
+        # terlalu besar skornya
+        normal_score = skor / (len(kata_kata) / 2)
+        skor = max(-1, min(1, normal_score))
     
-    # Tentukan sentimen
-    sentimen = 'netral'
+    # Tentukan sentimen kalimat
     if skor > 0.1:
         sentimen = 'positif'
     elif skor < -0.1:
         sentimen = 'negatif'
+    else:
+        sentimen = 'netral'
     
     return {
         'skor': skor,
@@ -194,10 +232,12 @@ def _analisis_kalimat(kalimat, kata_positif, kata_negatif, penguat_positif, peng
         'kata_negatif': kata_negatif_terdeteksi
     }
 
-# Kelas SentimentAnalyzer untuk kompatibilitas dengan kode yang sudah ada
 class SentimentAnalyzer:
     def __init__(self):
         pass
     
     def analisis(self, teks):
+        """
+        Mempertahankan kompatibilitas API lama.
+        """
         return analisis_sentimen(teks)
