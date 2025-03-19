@@ -1,6 +1,6 @@
 # textstat id
 
-Library untuk analisis statistik teks Bahasa Indonesia.
+Analisis statistik teks Bahasa Indonesia.
 
 ## Instalasi
 
@@ -35,3 +35,4 @@ print(f"Skor keterbacaan: {score}")
 - Mengekstrak kata kunci dari teks
 - Menghitung readability score untuk teks Bahasa Indonesia
 - Menganalisis sentimen teks Bahasa Indonesia
+
