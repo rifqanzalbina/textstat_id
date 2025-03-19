@@ -35,4 +35,6 @@ print(f"Skor keterbacaan: {score}")
 - Mengekstrak kata kunci dari teks
 - Menghitung readability score untuk teks Bahasa Indonesia
 - Menganalisis sentimen teks Bahasa Indonesia
+- Mengekstrak link url
+- Menganalisis link url
 
